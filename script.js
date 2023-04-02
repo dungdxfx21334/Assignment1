@@ -58,19 +58,22 @@ function renderTableData(petArr) {
   }
 }
 
-// Delete
+// Adding delete function to the delete button. Because I don't use the onClick function, I need to add the delete function to every delete buttons
+// every time the table is re-rendered. So making it a function would be eaiser to complete the task.
 function addDelete() {
   let btnDeletes = document.querySelectorAll(".btn-delete");
   if (btnDeletes) {
     //remove the pet from the list
     const deletePet = function (id) {
       if (confirm("Are you sure")) {
+        // General list
         for (let i = 0, petArrLen = petArr.length; i < petArrLen; i++) {
           if (petArr[i].id === id) {
             petArr.splice(i, 1);
             break;
           }
         }
+        // id list. So the removed ID can be use in the future.
         for (let i = 0, idArrLen = idArr.length; i < idArrLen; i++) {
           if (idArr[i] === id) {
             idArr.splice(i, 1);
@@ -90,7 +93,8 @@ function addDelete() {
         }
         const tableRows = document.querySelectorAll(".table-row");
 
-        console.log(tableRows);
+        // console.log(tableRows);
+        // Making the content of the row that contains the clicked delete button empty instead of re-rendering the whole table.
         for (let i = 0, tableRowLen = tableRows.length; i < tableRowLen; i++) {
           //   console.log(tableRows[i]);
           for (
@@ -98,7 +102,9 @@ function addDelete() {
             j < rowIClassListLen;
             j++
           ) {
-            console.log(tableRows[i].classList[j]);
+            // console.log(tableRows[i].classList[j]);
+            // The row contains a class "row-id---", and we base on this class to find out which row is deleted.
+            // The row is deleted if its "row-id--" has the same value as the id extract from the clicked delete button
             if (tableRows[i].classList[j].indexOf("row-id--") !== -1) {
               //   console.log(tableRows[i].classList[j].indexOf("row-id--"));
               //   console.log(
@@ -111,7 +117,7 @@ function addDelete() {
                   tableRows[i].classList[j].indexOf("row-id--") + 8
                 ) === id
               ) {
-                console.log("set");
+                // console.log("set");
                 tableRows[i].innerHTML = "";
                 break;
               }
@@ -119,13 +125,17 @@ function addDelete() {
           }
         }
       }
-      return 1;
+      return 1; // Not nessecary for now but maybe in the future
     };
+
+    // Add the delete function to all the delete button
     for (let j = 0, btnDelLen = btnDeletes.length; j < btnDelLen; j++) {
-      console.log(j);
+      //   console.log(j);
       btnDeletes[j].addEventListener("click", function () {
+        // When a button is clicked, extract the id of the pet from the class "id--" of the clicked button and store it into the removedID variable
+
         const btnJClassList = btnDeletes[j].classList;
-        console.log(btnJClassList);
+        // console.log(btnJClassList);
         let indexOfId = 0; // The index of the class than contains the id of the pet in this button
         for (
           let i = 0, btnJClassListLen = btnJClassList.length;
@@ -141,7 +151,8 @@ function addDelete() {
         }
         // extract the id from the class
         const removedID = btnJClassList[indexOfId].slice(4);
-        console.log(removedID);
+        // 4 because of the length of "id--" is for, the rest of the class name is the id of the pet.
+        // console.log(removedID);
         deletePet(removedID);
       });
     }
@@ -149,10 +160,8 @@ function addDelete() {
 }
 
 btnSubmit.addEventListener("click", function () {
-  //   const deleteIT = document.getElementById("content");
-  //   deleteIT.innerHTML = "";
-  // Make the show healthy pet button display "Show healthy pet" text as every time user add a new pet,
-  // a list of every pet should be displayed instead of only healthy pet even though the user was seeing all healthy pet.
+  // Make the show healthy pet button display "Show healthy pet" text every time user add a new pet,
+  // a list of every pet should be displayed instead of only healthy pet even though the user was seeing all healthy pet when they submit a new pet.
   btnShowHealthyPetText("Show Healthy Pet");
   healthyCheck = false;
   const petID = document.getElementById("input-id");
@@ -188,6 +197,7 @@ btnSubmit.addEventListener("click", function () {
     // ID
     if (!data.id) {
       alert("ID cannot be left empty");
+
       return false;
     }
     for (let i = 0, idArrLen = idArr.length; i < idArrLen; i++) {
@@ -232,8 +242,8 @@ btnSubmit.addEventListener("click", function () {
   };
 
   // Add pet to the list
-  //   const validate = validateData(data);
-  const validate = 1;
+  const validate = validateData(data);
+  //   const validate = 1;
   if (validate) {
     petArr.push(data);
     clearInput();
@@ -266,7 +276,7 @@ function btnShowHealthyPetText(message) {
 
 btnHealthyPet.addEventListener("click", function () {
   if (!healthyCheck) {
-    console.log(healthyCheck);
+    // console.log(healthyCheck);
     healthyCheck = true;
     btnShowHealthyPetText("Show All Pet");
     // btnHealthyPet.textContent = "Show All Pet";
@@ -277,7 +287,7 @@ btnHealthyPet.addEventListener("click", function () {
         healthyPets.push(petArr[i]);
       }
     }
-    console.log(healthyPets);
+    // console.log(healthyPets);
     renderTableData(healthyPets);
     addDelete();
   } else {
@@ -291,11 +301,13 @@ btnHealthyPet.addEventListener("click", function () {
 
 // Calculate BMI
 const btnBMI = document.getElementById("bmi-btn");
+// For display BMI, add a new property to the petAdd[i] called bmi, this property has default value set to "?"
+// When the calcBMI is called, the bmi property is modify and the renderTableData() is called to display new value of the bmi property
 if (btnBMI) {
   btnBMI.addEventListener("click", function () {
     for (let i = 0, petArrLen = petArr.length; i < petArrLen; i++) {
       petArr[i].bmi = calcBMI(petArr[i]);
-      console.log(petArr[i].bmi);
+      //   console.log(petArr[i].bmi);
     }
     renderTableData(petArr);
     addDelete();
