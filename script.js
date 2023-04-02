@@ -309,7 +309,10 @@ if (btnBMI) {
       petArr[i].bmi = calcBMI(petArr[i]);
       //   console.log(petArr[i].bmi);
     }
+    // Making bmi calculating button show all the pet.
     renderTableData(petArr);
+    btnShowHealthyPetText("Show Healthy Pet");
+    healthyCheck = false;
     addDelete();
   });
 }
