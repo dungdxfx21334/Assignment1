@@ -160,10 +160,6 @@ function addDelete() {
 }
 
 btnSubmit.addEventListener("click", function () {
-  // Make the show healthy pet button display "Show healthy pet" text every time user add a new pet,
-  // a list of every pet should be displayed instead of only healthy pet even though the user was seeing all healthy pet when they submit a new pet.
-  btnShowHealthyPetText("Show Healthy Pet");
-  healthyCheck = false;
   const petID = document.getElementById("input-id");
   const petName = document.getElementById("input-name");
   const petAge = document.getElementById("input-age");
@@ -248,6 +244,10 @@ btnSubmit.addEventListener("click", function () {
     petArr.push(data);
     clearInput();
     renderTableData(petArr);
+    // Make the show healthy pet button display "Show healthy pet" text every time user add a new pet,
+    // a list of every pet should be displayed instead of only healthy pet even though the user was seeing all healthy pet when they submit a new pet.
+    btnShowHealthyPetText("Show Healthy Pet");
+    healthyCheck = false;
   }
   // Clear input
   function clearInput() {
