@@ -4,7 +4,7 @@
 
 const petArr = []; // All the pet in the list
 const idArr = []; // All the ids of the pets in the list
-let healthyPets = [];
+let healthyPets = []; // For healthy pets
 const btnSubmit = document.getElementById("submit-btn"); // submit btn
 const btnHealthyPet = document.getElementById("healthy-btn"); // show healthy pet btn
 
