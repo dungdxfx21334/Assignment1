@@ -4,7 +4,9 @@
 
 const petArr = []; // All the pet in the list
 const idArr = []; // All the ids of the pets in the list
-const btnSubmit = document.getElementById("submit-btn");
+let healthyPets = [];
+const btnSubmit = document.getElementById("submit-btn"); // submit btn
+const btnHealthyPet = document.getElementById("healthy-btn"); // show healthy pet btn
 
 // I can simply use onClick but it doesn't seem to challenging enough. ?
 
@@ -72,6 +74,17 @@ function addDelete() {
             break;
           }
         }
+        // remove from the healthy pet list as well if the pet is listed in the healthy list
+        for (
+          let i = 0, healthyPetsLen = healthyPets.length;
+          i < healthyPetsLen;
+          i++
+        ) {
+          if (healthyPets[i].id === id) {
+            healthyPets.splice(i, 1);
+            break;
+          }
+        }
         const tableRows = document.querySelectorAll(".table-row");
 
         console.log(tableRows);
@@ -135,6 +148,10 @@ function addDelete() {
 btnSubmit.addEventListener("click", function () {
   //   const deleteIT = document.getElementById("content");
   //   deleteIT.innerHTML = "";
+  // Make the show healthy pet button display "Show healthy pet" text as every time user add a new pet,
+  // a list of every pet should be displayed instead of only healthy pet even though the user was seeing all healthy pet.
+  btnShowHealthyPetText("Show Healthy Pet");
+  healthyCheck = false;
   const petID = document.getElementById("input-id");
   const petName = document.getElementById("input-name");
   const petAge = document.getElementById("input-age");
@@ -218,7 +235,7 @@ btnSubmit.addEventListener("click", function () {
     clearInput();
     renderTableData(petArr);
   }
-
+  // Clear input
   function clearInput() {
     petID.value = "";
     petName.value = "";
@@ -237,16 +254,20 @@ btnSubmit.addEventListener("click", function () {
 
 // Show healthy pet
 
-const btnHealthyPet = document.getElementById("healthy-btn");
-
 let healthyCheck = false;
+
+function btnShowHealthyPetText(message) {
+  btnHealthyPet.textContent = message;
+}
 
 btnHealthyPet.addEventListener("click", function () {
   if (!healthyCheck) {
     console.log(healthyCheck);
     healthyCheck = true;
-    btnHealthyPet.textContent = "Show All Pet";
-    const healthyPets = [];
+    btnShowHealthyPetText("Show All Pet");
+    // btnHealthyPet.textContent = "Show All Pet";
+    healthyPets = [];
+
     for (let i = 0, petArrLen = petArr.length; i < petArrLen; i++) {
       if (petArr[i].vaccinated && petArr[i].dewormed && petArr[i].sterilized) {
         healthyPets.push(petArr[i]);
@@ -256,7 +277,8 @@ btnHealthyPet.addEventListener("click", function () {
     renderTableData(healthyPets);
     addDelete();
   } else {
-    btnHealthyPet.textContent = "Show Healthy Pet";
+    // btnHealthyPet.textContent = "Show Healthy Pet";
+    btnShowHealthyPetText("Show Healthy Pet");
     healthyCheck = false;
     renderTableData(petArr);
     addDelete();
