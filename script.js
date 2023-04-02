@@ -44,6 +44,9 @@ function renderTableData(petArr) {
                   : '<i class="bi bi-x-circle-fill"></i>'
               }</td>
 							<td>${petArr[i].date.toISOString().split("T")[0]}</td>
+                            <td class="bmi-id--${petArr[i].id}">${
+      petArr[i].bmi
+    }</td>
 							<td><button type="button" class="id--${
                 petArr[i].id
               } btn btn-danger btn-delete">Delete</button> 
@@ -176,6 +179,7 @@ btnSubmit.addEventListener("click", function () {
     dewormed: isDewormed.checked,
     sterilized: isSterilized.checked,
     date: new Date(),
+    bmi: "?",
   };
 
   // Validate information
@@ -284,3 +288,32 @@ btnHealthyPet.addEventListener("click", function () {
     addDelete();
   }
 });
+
+// Calculate BMI
+const btnBMI = document.getElementById("bmi-btn");
+if (btnBMI) {
+  btnBMI.addEventListener("click", function () {
+    for (let i = 0, petArrLen = petArr.length; i < petArrLen; i++) {
+      petArr[i].bmi = calcBMI(petArr[i]);
+      console.log(petArr[i].bmi);
+    }
+    renderTableData(petArr);
+    addDelete();
+  });
+}
+
+function calcBMI(petData) {
+  let bmi = petData.weight / petData.length ** 2;
+  switch (petData.type) {
+    case "Dog":
+      bmi *= 703;
+      break;
+    case "Cat":
+      bmi *= 886;
+      break;
+    default:
+      break;
+  }
+
+  return Math.round((bmi + Number.EPSILON) * 100) / 100;
+}
